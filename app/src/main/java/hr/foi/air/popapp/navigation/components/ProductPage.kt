@@ -16,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun ProductPage(viewModel: ProductsViewModel = viewModel()) {
     val products by viewModel.products.observeAsState()
+    viewModel.fetchProducts()
 
     if (products?.isEmpty() == true) {
         CircularProgressIndicator(
