@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.utsman.osmandcompose.*
 import hr.foi.air.popapp.R
+import hr.foi.air.popapp.ui.components.StoreCard
 import hr.foi.air.popapp.ui.components.StyledButton
 import hr.foi.air.popapp.viewmodels.StoresViewModel
 import hr.foi.air.popapp.ws.models.responses.Store
@@ -88,7 +89,8 @@ fun SelectStorePage(
                 Marker(
                     state = markerState,
                     infoWindowContent = {
-                        Text(text = store.name!!)
+                        StoreCard(store = store)
+                        storeMarkers.forEach { (ms) -> if (ms != markerState) ms.marker!!.closeInfoWindow() }
                     },
                     onClick = {
                         selectedStore = store
