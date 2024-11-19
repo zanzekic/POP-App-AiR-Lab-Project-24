@@ -13,6 +13,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import hr.foi.air.popapp.context.Auth
 import hr.foi.air.popapp.login_username_password.UsernamePasswordLoginHandler
 import hr.foi.air.popapp.navigation.components.EntryPage
 import hr.foi.air.popapp.navigation.components.HomePage
@@ -66,7 +67,16 @@ class MainActivity : ComponentActivity() {
                         composable("login") {
                             LoginPage(
                                 onSuccessfulLogin = {
-                                    navController.navigate("home")
+                                    val userData = Auth.loggedInUserData!!
+                                    if (userData.storeName != null) {
+                                        navController.navigate("home")
+                                    } else {
+                                        when (userData.role) {
+                                            "buyer" -> navController.navigate("select-store")
+                                            "seller" -> navController.navigate("create-store")
+                                            else -> navController.navigate("home")
+                                        }
+                                    }
                                 },
                                 loginHandler = currentLoginHandler
                             )
@@ -85,6 +95,12 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("products") {
                             ProductPage()
+                        }
+                        composable("select-store") {
+                            TODO()
+                        }
+                        composable("create-store") {
+                            TODO()
                         }
                     }
                 }
