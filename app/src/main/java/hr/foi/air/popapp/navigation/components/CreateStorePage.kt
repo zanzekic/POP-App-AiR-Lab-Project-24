@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,11 +30,18 @@ import com.utsman.osmandcompose.rememberCameraState
 import com.utsman.osmandcompose.rememberMarkerState
 import hr.foi.air.popapp.ui.components.StyledButton
 import hr.foi.air.popapp.ui.components.StyledTextField
+import hr.foi.air.popapp.viewmodels.NewStoreViewModel
 import org.osmdroid.util.GeoPoint
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun CreateStorePage(onStoreCreated: (newStoreId: Int) -> Unit) {
-    var storeName by remember { mutableStateOf("") }
+fun CreateStorePage(
+    viewModel: NewStoreViewModel = viewModel(),
+    onStoreCreated: () -> Unit
+) {
+    val storeName by viewModel.storeName.observeAsState()
+    val errorMessage by viewModel.errorReason.observeAsState()
+
     val storeLocationMarkerState = rememberMarkerState(
         geoPoint = GeoPoint(0.0, 0.0)
     )
@@ -54,10 +62,15 @@ fun CreateStorePage(onStoreCreated: (newStoreId: Int) -> Unit) {
             style = MaterialTheme.typography.bodyMedium,
         )
 
+        Text(
+            text = errorMessage!!,
+            color = Color.Red
+        )
+
         StyledTextField(
             label = "Your new store name",
-            value = storeName,
-            onValueChange = { storeName = it },
+            value = storeName!!,
+            onValueChange = { viewModel.setStoreName(it) },
         )
 
         Text(
@@ -76,6 +89,7 @@ fun CreateStorePage(onStoreCreated: (newStoreId: Int) -> Unit) {
             onMapLongClick = {
                 storeLocationMarkerState.geoPoint = it
                 isStoreSet = true
+                viewModel.setStoreLocation(it.latitude, it.longitude)
             },
             properties = MapProperties(
                 minZoomLevel = 17.0,
@@ -96,8 +110,8 @@ fun CreateStorePage(onStoreCreated: (newStoreId: Int) -> Unit) {
 
         StyledButton(
             label = "Create store",
-            onClick = { /*TODO*/ },
-            enabled = isStoreSet && storeName.isNotBlank()
+            onClick = { viewModel.createStore(onSuccessfulResponse = onStoreCreated) },
+            enabled = isStoreSet && storeName!!.isNotBlank()
         )
     }
 }
@@ -105,5 +119,5 @@ fun CreateStorePage(onStoreCreated: (newStoreId: Int) -> Unit) {
 @Preview
 @Composable
 fun CreateStorePagePreview() {
-    CreateStorePage({})
+    CreateStorePage(onStoreCreated = {})
 }
