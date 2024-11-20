@@ -15,11 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import hr.foi.air.popapp.context.Auth
 import hr.foi.air.popapp.login_username_password.UsernamePasswordLoginHandler
-import hr.foi.air.popapp.navigation.components.CreateStorePage
-import hr.foi.air.popapp.navigation.components.EntryPage
-import hr.foi.air.popapp.navigation.components.HomePage
-import hr.foi.air.popapp.navigation.components.LoginPage
-import hr.foi.air.popapp.navigation.components.ProductPage
+import hr.foi.air.popapp.navigation.components.*
 import hr.foi.air.popapp.navigation.components.registration.PostRegistrationNotice
 import hr.foi.air.popapp.navigation.components.registration.RegistrationPage
 import hr.foi.air.popapp.ui.theme.POPAppTheme
@@ -82,6 +78,16 @@ class MainActivity : ComponentActivity() {
                                 loginHandler = currentLoginHandler
                             )
                         }
+                        composable("select-store") {
+                            SelectStorePage(onStoreSelected = {
+                                navController.navigate("home")
+                            })
+                        }
+                        composable("create-store") {
+                            CreateStorePage(onStoreCreated = {
+                                navController.navigate("home")
+                            })
+                        }
                         composable("home") {
                             HomePage(onMenuOptionSelected = { selectedRoute ->
                                 when (selectedRoute) {
@@ -96,14 +102,6 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("products") {
                             ProductPage()
-                        }
-                        composable("select-store") {
-                            TODO()
-                        }
-                        composable("create-store") {
-                            CreateStorePage(onStoreCreated = {
-                                navController.navigate("home")
-                            })
                         }
                     }
                 }
