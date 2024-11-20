@@ -17,10 +17,9 @@ class ProductsViewModel : ViewModel() {
     init {
         val productsRequestHandler = ProductsRequestHandler(Auth.loggedInUserData!!.jwt)
 
-        productsRequestHandler.sendRequest(object : ResponseListener {
-            override fun <T> onSuccessfulResponse(response: SuccessfulResponseBody<T>) {
-                val productsArray = response.data
-                _products.value = ((productsArray as Array<Product>).toMutableList())
+        productsRequestHandler.sendRequest(object : ResponseListener<Product> {
+            override fun onSuccessfulResponse(response: SuccessfulResponseBody<Product>) {
+                _products.value = response.data.toMutableList()
             }
 
             override fun onErrorResponse(response: ErrorResponseBody) {
