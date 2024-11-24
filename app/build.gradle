@@ -63,4 +63,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.runtime.livedata)
+
+    implementation(libs.osmdroid.android)
+    implementation(libs.osm.android.compose)
 }
