@@ -14,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,14 +23,19 @@ import hr.foi.air.popapp.ui.components.MenuItem
 import hr.foi.air.popapp.ui.theme.POPAppTheme
 import java.util.*
 
+val menuItemsAll = listOf(
+    "Balance" to Icons.Default.Star,
+    "Invoices" to Icons.AutoMirrored.Filled.List
+)
+val menuItemsBuyer = listOf(
+    "Buy" to Icons.Default.ShoppingCart,
+)
+val menuItemsSeller = listOf(
+    "Products" to Icons.Default.ShoppingCart,
+)
+
 @Composable
 fun HomePage(onMenuOptionSelected: (optionName: String) -> Unit) {
-    val menuItems = listOf(
-        "Products" to Icons.Default.ShoppingCart,
-        "Balance" to Icons.Default.Star,
-        "Invoices" to Icons.AutoMirrored.Filled.List,
-    )
-
     Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
         Text(
             text = "Welcome, ${Auth.loggedInUserData?.firstName ?: "[Unknown name]"}",
@@ -45,10 +51,24 @@ fun HomePage(onMenuOptionSelected: (optionName: String) -> Unit) {
                 .background(MaterialTheme.colorScheme.background)
                 .padding(20.dp)
         ) {
-            items(menuItems) { (text, icon) ->
+            items(getMenuItemsListBasedOnRole()) { (text, icon) ->
+                MenuItem(text, icon) {
+                    onMenuOptionSelected(text.lowercase(Locale.getDefault()))
+                }
+            }
+
+            items(menuItemsAll) { (text, icon) ->
                 MenuItem(text, icon) { onMenuOptionSelected(text.lowercase(Locale.getDefault())) }
             }
         }
+    }
+}
+
+private fun getMenuItemsListBasedOnRole(): List<Pair<String, ImageVector>> {
+    return when (Auth.loggedInUserData!!.role) {
+        "buyer" -> menuItemsBuyer
+        "seller" -> menuItemsSeller
+        else -> listOf()
     }
 }
 
