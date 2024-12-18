@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +36,7 @@ fun LoginPage(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .testTag("errorMessage")
             .padding(16.dp),
         verticalArrangement = Arrangement.Center
     ) {

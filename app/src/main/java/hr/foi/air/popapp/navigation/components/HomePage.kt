@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +37,7 @@ val menuItemsSeller = listOf(
 
 @Composable
 fun HomePage(onMenuOptionSelected: (optionName: String) -> Unit) {
-    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+    Column(modifier = Modifier.background(MaterialTheme.colorScheme.background).testTag("intro")) {
         Text(
             text = "Welcome, ${Auth.loggedInUserData?.firstName ?: "[Unknown name]"}",
             style = MaterialTheme.typography.titleMedium,
